@@ -1,0 +1,80 @@
+gradle-wrapper.jar
+/.gradle
+/captures/
+/gradlew
+/gradlew.bat
+/local.properties
+GeneratedPluginRegistrant.java
+
+# Remember to never publicly share your keystore.
+# See https://flutter.dev/docs/deployment/android#reference-the-keystore-from-the-app
+key.properties
+**/*.keystore
+**/*.jks
+
+# Flutter/Dart specific
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub/
+/build/
+
+# IntelliJ
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# Android
+/build/
+/captures/
+/android/key.properties
+/android/app/debug.keystore
+/android/app/key.properties
+/android/gradle.properties
+/android/local.properties
+/android/gradle/
+/android/app/build/
+/android/Flutter/build/
+/android/Flutter/app/build/
+
+# iOS
+/Pods/
+/ios/Podfile.lock
+/ios/Pods/
+/ios/Flutter/build/
+/ios/Runner/build/
+/ios/Runner/GeneratedPluginRegistrant.*
+
+# macOS
+/macos/Flutter/build/
+
+# Windows
+/windows/Flutter/build/
+/windows/Flutter/app.vc.db
+/windows/Flutter/app.vc.vc.db
+
+# Web
+/web/build/
+/web/.dart_tool/
+/web/packages/
+
+# Test
+/test/
+
+# Other
+*.iml
+*.log
+*.log.*
+*.log-*
+*.bat
+*.map
+*.png
+*.sublime-workspace
+*.sublime-project
+*.vscode
+*.idea
+*.DS_Store
+Thumbs.db
