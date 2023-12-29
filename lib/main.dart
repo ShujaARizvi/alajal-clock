@@ -1,5 +1,12 @@
 import 'dart:async';
 
+import 'package:alajal_clock/glance/glance.dart';
+import 'package:alajal_clock/reminder/reminder.dart';
+import 'package:vibration/vibration.dart';
+
+import 'package:alajal_clock/watch-faces/face1.dart';
+import 'package:alajal_clock/watch-faces/face2.dart';
+import 'package:alajal_clock/watch-faces/face3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -25,19 +32,27 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
+    final ThemeData theme = ThemeData(
+      primarySwatch: Colors.green,
+      fontFamily: 'FiraCode',
+    );
+
     return MaterialApp(
       title: 'AlAjal Clock',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Digital7',
-        textTheme: const TextTheme(
-            bodyMedium: TextStyle(color: Colors.white, fontSize: 16),
-            headlineLarge: TextStyle(color: Colors.white, fontSize: 88)),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          background: Colors.transparent,
-        ),
-        useMaterial3: true,
+      theme: theme.copyWith(
+        textTheme: ThemeData.light().textTheme.copyWith(
+            bodyMedium: const TextStyle(color: Colors.white, fontSize: 22),
+            bodyLarge: const TextStyle(
+                color: Colors.white, fontSize: 38, fontWeight: FontWeight.bold),
+            headlineMedium: const TextStyle(
+                color: Colors.white, fontSize: 16, fontFamily: 'Digital7'),
+            headlineLarge: const TextStyle(
+                color: Colors.white, fontSize: 88, fontFamily: 'Digital7')),
+        // colorScheme: ColorScheme.fromSeed(
+        //   seedColor: Colors.deepPurple,
+        //   background: Colors.black,
+        // ),
       ),
       home: const MyHomePage(title: ''),
     );
@@ -64,12 +79,24 @@ class _MyHomePageState extends State<MyHomePage> {
   late String _minutes;
   late String _seconds;
 
+  bool _isWatchFaceSelectionEnabled = false;
+  bool _isUsedForSelection = false;
+  late int _currentWatchFaceIdx;
+  late List<Widget> watchFaces;
+
+  late String formattedDate =
+      DateFormat('EEEE, MMMM dd, yyyy HH:mm').format(DateTime.now());
+
   _MyHomePageState() {
     targetDate = DateTime.utc(941, 6, 7);
   }
+
   @override
   void initState() {
     super.initState();
+
+    _currentWatchFaceIdx = 0;
+
     Timer.periodic(
         const Duration(seconds: 1),
         (timer) => setState(() {
@@ -78,101 +105,85 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void dispose() {
+    // _controllerVertical.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('EEEE, MMMM dd, yyyy HH:mm').format(now);
+    watchFaces = [
+      Face1(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
+          onWatchFaceSelected, _isUsedForSelection),
+      Face2(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
+          onWatchFaceSelected, _isUsedForSelection),
+      Face3(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
+          onWatchFaceSelected, _isUsedForSelection)
+    ];
 
     return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // const Text(
-              //   'این قدر وقت گذشت که تو رو ندیدیم، بیا',
-              //   style: TextStyle(color: Colors.red, fontSize: 32),
-              // ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  getTimePassedWidget('Years', _years, 5),
-                  getTimePassedWidget('Months', _months, 5),
-                  getTimePassedWidget('Days', _days, 0),
-                  // const SizedBox(
-                  //   width: 25,
-                  // ),
-                  Container(
-                    margin: const EdgeInsets.all(10),
-                    height: 180.0, // Adjust the height of the line
-                    width: 1.0, // Adjust the width of the line
-                    color: Colors.white,
-                  ),
-                  getTimePassedWidget('Hours', _hours, 5),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(bottom: 14.0),
-                  //   child: Text(
-                  //     ':',
-                  //     style: Theme.of(context).textTheme.headlineLarge,
-                  //   ),
-                  // ),
-                  getTimePassedWidget('Minutes', _minutes, 5),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(bottom: 14.0),
-                  //   child: Text(
-                  //     ':',
-                  //     style: Theme.of(context).textTheme.headlineLarge,
-                  //   ),
-                  // ),
-                  getTimePassedWidget('Seconds', _seconds, 0),
-                ],
-              ),
-              Text(
-                formattedDate,
-                style: const TextStyle(fontFamily: 'Robotto'),
-              ),
-            ],
-          ),
-        ),
-      ),
+        onWillPop: () async => false,
+        child: _isWatchFaceSelectionEnabled
+            ? getHorizontalPageView(formattedDate)
+            : getVerticalPageView(formattedDate));
+  }
+
+  getVerticalPageView(String formattedDate) {
+    return PageView(
+      scrollDirection: Axis.vertical,
+      controller: PageController(initialPage: 1),
+      children: [
+        Glance(date: DateTime.now().toUtc()),
+        GestureDetector(
+            onLongPress: () => setState(() {
+                  _isWatchFaceSelectionEnabled = true;
+                  _isUsedForSelection = true;
+
+                  Vibration.vibrate(duration: 100);
+                }),
+            child: watchFaces[_currentWatchFaceIdx]),
+        const Reminders()
+      ],
     );
   }
 
-  getTimePassedWidget(String title, String value, double margin) {
-    return Container(
-      margin: EdgeInsets.only(right: margin),
-      constraints: const BoxConstraints(
-        maxHeight: 180.0, // Set the maximum height of the container
-      ),
-      decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 26, 26, 27),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      color: Color.fromRGBO(41, 40, 40, 1), width: 1.5),
-                ),
-              ),
-              child: Text(
-                value,
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-            ),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
+  getHorizontalPageView(String formattedDate) {
+    return Stack(
+      children: [
+        PageView.builder(
+          controller: PageController(initialPage: _currentWatchFaceIdx),
+          onPageChanged: (int page) {
+            setState(() {
+              _currentWatchFaceIdx = page;
+            });
+          },
+          itemCount: watchFaces.length,
+          itemBuilder: (BuildContext context, int index) {
+            return watchFaces[index % watchFaces.length];
+          },
         ),
-      ),
+        Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 10,
+            child: Container(
+              color: Colors.transparent,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List<Widget>.generate(
+                      watchFaces.length,
+                      (index) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: CircleAvatar(
+                              radius: 8,
+                              backgroundColor: _currentWatchFaceIdx == index
+                                  ? Colors.red
+                                  : Colors.white,
+                            ),
+                          ))),
+            )),
+      ],
     );
   }
 
@@ -200,5 +211,15 @@ class _MyHomePageState extends State<MyHomePage> {
     _hours = _hours.length == 1 ? '0$_hours' : _hours;
     _minutes = _minutes.length == 1 ? '0$_minutes' : _minutes;
     _seconds = _seconds.length == 1 ? '0$_seconds' : _seconds;
+  }
+
+  void onWatchFaceSelected(int watchFaceIndex) {
+    setState(() {
+      _isWatchFaceSelectionEnabled = false;
+      _isUsedForSelection = false;
+      _currentWatchFaceIdx = watchFaceIndex;
+
+      Vibration.vibrate(duration: 100);
+    });
   }
 }

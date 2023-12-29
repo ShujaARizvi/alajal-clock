@@ -36,6 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   wakelock_plus: ^1.1.4
   intl: ^0.17.0
+  vibration: ^1.8.4
+  battery: ^2.0.0
+  screen_brightness: ^0.2.2+1
 
 dev_dependencies:
   flutter_test:
@@ -75,26 +78,15 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: DIGITALDREAM
-      fonts:
-        - asset: assets/fonts/DIGITALDREAM.ttf
-          weight: 700
     - family: Digital7
       fonts:
-        # - asset: assets/fonts/digital-7.ttf
         - asset: assets/fonts/digital-7-mono.ttf
-          weight: 700
-    - family: SegmentLED
+          weight: 400
+    - family: FiraCode
       fonts:
-        - asset: assets/fonts/segment-led-regular.ttf
-          weight: 700
-    - family: Open24Display
-      fonts:
-        - asset: assets/fonts/open-24-display.ttf
-          weight: 700
-    - family: Lateef
-      fonts:
-        - asset: assets/fonts/lateef.woff2
+        - asset: assets/fonts/FiraCode-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/FiraCode-Bold.ttf
           weight: 700
   #
   # For details regarding fonts from package dependencies,
