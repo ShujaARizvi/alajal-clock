@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:battery/battery.dart';
 import 'package:flutter/material.dart';
 
@@ -12,31 +14,36 @@ class BatteryPercentageWidget extends StatefulWidget {
 class _BatteryPercentageWidgetState extends State<BatteryPercentageWidget> {
   final Battery _battery = Battery();
 
+  late int batteryLevel;
+
+  @override
+  void initState() {
+    super.initState();
+
+    batteryLevel = 100;
+
+    Timer.periodic(
+        const Duration(seconds: 1),
+        (timer) => _battery.batteryLevel.then((value) {
+              setState(() {
+                batteryLevel = value;
+              });
+            }));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<int>(
-      future: _battery.batteryLevel,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          int batteryLevel = snapshot.data!;
-          return Row(
-            children: [
-              Icon(
-                getBatteryLevelIcon(batteryLevel),
-                color: Colors.white,
-                size: 54.0,
-              ),
-              Text(
-                '$batteryLevel%',
-              ),
-            ],
-          );
-        }
-      },
+    return Row(
+      children: [
+        Icon(
+          getBatteryLevelIcon(batteryLevel),
+          color: Colors.white,
+          size: 54.0,
+        ),
+        Text(
+          '$batteryLevel%',
+        ),
+      ],
     );
   }
 

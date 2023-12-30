@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:alajal_clock/glance/glance.dart';
 import 'package:alajal_clock/reminder/reminder.dart';
+import 'package:alajal_clock/watch_faces/face4/face4.dart';
+import 'package:alajal_clock/watch_faces/face5.dart';
 import 'package:vibration/vibration.dart';
 
-import 'package:alajal_clock/watch-faces/face1.dart';
-import 'package:alajal_clock/watch-faces/face2.dart';
-import 'package:alajal_clock/watch-faces/face3.dart';
+import 'package:alajal_clock/watch_faces/face1.dart';
+import 'package:alajal_clock/watch_faces/face2.dart';
+import 'package:alajal_clock/watch_faces/face3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -95,19 +97,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    _currentWatchFaceIdx = 0;
+    _currentWatchFaceIdx = 4;
 
     Timer.periodic(
         const Duration(seconds: 1),
         (timer) => setState(() {
               updateClock();
             }));
-  }
-
-  @override
-  void dispose() {
-    // _controllerVertical.dispose();
-    super.dispose();
   }
 
   @override
@@ -118,7 +114,11 @@ class _MyHomePageState extends State<MyHomePage> {
       Face2(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
       Face3(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
-          onWatchFaceSelected, _isUsedForSelection)
+          onWatchFaceSelected, _isUsedForSelection),
+      Face4(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
+          onWatchFaceSelected, _isUsedForSelection),
+      Face5(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
+          onWatchFaceSelected, _isUsedForSelection),
     ];
 
     return WillPopScope(
