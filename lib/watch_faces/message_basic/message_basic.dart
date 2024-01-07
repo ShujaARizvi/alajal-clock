@@ -1,7 +1,6 @@
-import 'package:alajal_clock/watch_faces/face6/masked_image.dart';
 import 'package:flutter/material.dart';
 
-class Face6 extends StatelessWidget {
+class MessageBasic extends StatelessWidget {
   late final String years;
   late final String months;
   late final String days;
@@ -12,27 +11,39 @@ class Face6 extends StatelessWidget {
   late final Function onSelectionCb;
   late final bool isUsedForSelection;
 
-  Face6(this.years, this.months, this.days, this.hours, this.minutes,
-      this.seconds, this.onSelectionCb, this.isUsedForSelection)
+  late final String message;
+  late final int onSelectionIdx;
+
+  MessageBasic(
+      this.years,
+      this.months,
+      this.days,
+      this.hours,
+      this.minutes,
+      this.seconds,
+      this.onSelectionCb,
+      this.isUsedForSelection,
+      this.message,
+      this.onSelectionIdx)
       : super();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => isUsedForSelection ? onSelectionCb(5) : (() => {})(),
+      onTap: () =>
+          isUsedForSelection ? onSelectionCb(onSelectionIdx) : (() => {})(),
       child: Transform.scale(
         scale: isUsedForSelection ? 0.8 : 1,
         child: Scaffold(
-          backgroundColor: const Color.fromARGB(255, 231, 229, 229),
-          body: MaskedImage(
-            image: const AssetImage('assets/images/jamkaran_3.jpeg'),
+          backgroundColor: Colors.transparent,
+          body: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  '!وقت می گذرد ولی تو را نمی بینیم، بیا',
-                  style: TextStyle(
-                      color: Colors.green,
+                Text(
+                  message,
+                  style: const TextStyle(
+                      color: Colors.red,
                       fontSize: 32,
                       fontWeight: FontWeight.bold),
                 ),
@@ -43,18 +54,28 @@ class Face6 extends StatelessWidget {
                     getTimePassedWidget(context, 'Years', years, 5),
                     getTimePassedWidget(context, 'Months', months, 5),
                     getTimePassedWidget(context, 'Days', days, 0),
-                    Container(
-                      margin: const EdgeInsets.all(10),
-                      width: 1.0,
-                      color: Colors.transparent,
+                    const SizedBox(
+                      width: 25,
                     ),
                     getTimePassedWidget(context, 'Hours', hours, 5),
-                    getCollon(context),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 14.0),
+                      child: Text(
+                        ':',
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
+                    ),
                     getTimePassedWidget(context, 'Minutes', minutes, 5),
-                    getCollon(context),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 14.0),
+                      child: Text(
+                        ':',
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
+                    ),
                     getTimePassedWidget(context, 'Seconds', seconds, 0),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -66,39 +87,30 @@ class Face6 extends StatelessWidget {
   getTimePassedWidget(
       BuildContext context, String title, String value, double margin) {
     return Container(
-      margin: EdgeInsets.only(right: margin, top: 50),
+      margin: EdgeInsets.only(right: margin),
+      constraints: const BoxConstraints(
+        maxHeight: 180.0, // Set the maximum height of the container
+      ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(value,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineLarge!
-                    .copyWith(fontSize: 176, fontFamily: 'Delirium')),
             Text(
-              title,
+              value,
               style: Theme.of(context)
                   .textTheme
-                  .headlineMedium!
-                  .copyWith(fontSize: 32, fontFamily: 'Delirium'),
+                  .headlineLarge!
+                  .copyWith(fontSize: 88),
+            ),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         ),
       ),
     );
   }
-
-  Padding getCollon(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 14.0),
-        child: Text(
-          ':',
-          style: Theme.of(context)
-              .textTheme
-              .headlineLarge!
-              .copyWith(fontSize: 180, fontFamily: 'Delirium'),
-        ),
-      );
 }

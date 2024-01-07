@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:analog_clock/analog_clock.dart';
 // import 'package:flutter_analog_clock/flutter_analog_clock.dart';
 
-class Face7 extends StatelessWidget {
+class Analog extends StatelessWidget {
   late final String years;
   late final String months;
   late final String days;
@@ -16,7 +16,7 @@ class Face7 extends StatelessWidget {
   late final Function onSelectionCb;
   late final bool isUsedForSelection;
 
-  Face7(this.years, this.months, this.days, this.hours, this.minutes,
+  Analog(this.years, this.months, this.days, this.hours, this.minutes,
       this.seconds, this.onSelectionCb, this.isUsedForSelection)
       : super();
 
@@ -41,7 +41,7 @@ class Face7 extends StatelessWidget {
     );
 
     return GestureDetector(
-      onTap: () => isUsedForSelection ? onSelectionCb(6) : (() => {})(),
+      onTap: () => isUsedForSelection ? onSelectionCb(1) : (() => {})(),
       child: Transform.scale(
         scale: isUsedForSelection ? 0.8 : 1,
         child: Scaffold(

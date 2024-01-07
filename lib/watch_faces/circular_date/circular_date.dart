@@ -1,7 +1,7 @@
-import 'package:alajal_clock/watch_faces/face4/percent_indicator.dart';
+import 'package:alajal_clock/watch_faces/circular_date/percent_indicator.dart';
 import 'package:flutter/material.dart';
 
-class Face4 extends StatelessWidget {
+class CircularDate extends StatelessWidget {
   late final String years;
   late final String months;
   late final String days;
@@ -12,14 +12,14 @@ class Face4 extends StatelessWidget {
   late final Function onSelectionCb;
   late final bool isUsedForSelection;
 
-  Face4(this.years, this.months, this.days, this.hours, this.minutes,
+  CircularDate(this.years, this.months, this.days, this.hours, this.minutes,
       this.seconds, this.onSelectionCb, this.isUsedForSelection)
       : super();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => isUsedForSelection ? onSelectionCb(3) : (() => {})(),
+      onTap: () => isUsedForSelection ? onSelectionCb(7) : (() => {})(),
       child: Transform.scale(
         scale: isUsedForSelection ? 0.8 : 1,
         child: Scaffold(

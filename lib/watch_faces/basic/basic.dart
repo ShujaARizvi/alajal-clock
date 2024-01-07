@@ -1,8 +1,8 @@
-import 'package:alajal_clock/watch_faces/face4/percent_indicator.dart';
+import 'package:alajal_clock/watch_faces/circular_date/percent_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-class Face1 extends StatelessWidget {
+class Basic extends StatelessWidget {
   late final String years;
   late final String months;
   late final String days;
@@ -26,7 +26,7 @@ class Face1 extends StatelessWidget {
     'SUN'
   ];
 
-  Face1(this.currentDate, this.years, this.months, this.days, this.hours,
+  Basic(this.currentDate, this.years, this.months, this.days, this.hours,
       this.minutes, this.seconds, this.onSelectionCb, this.isUsedForSelection)
       : super();
 

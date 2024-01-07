@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:alajal_clock/glance/glance.dart';
 import 'package:alajal_clock/reminder/reminder.dart';
-import 'package:alajal_clock/watch_faces/face4/face4.dart';
-import 'package:alajal_clock/watch_faces/face5.dart';
-import 'package:alajal_clock/watch_faces/face6/face6.dart';
-import 'package:alajal_clock/watch_faces/face7.dart';
+import 'package:alajal_clock/watch_faces/circular_date/circular_date.dart';
+import 'package:alajal_clock/watch_faces/circular_datetime/circular_datetime.dart';
+import 'package:alajal_clock/watch_faces/masked/masked.dart';
+import 'package:alajal_clock/watch_faces/analog/analog.dart';
 import 'package:vibration/vibration.dart';
 
-import 'package:alajal_clock/watch_faces/face1.dart';
-import 'package:alajal_clock/watch_faces/face2/face2.dart';
-import 'package:alajal_clock/watch_faces/face3.dart';
+import 'package:alajal_clock/watch_faces/basic/basic.dart';
+import 'package:alajal_clock/watch_faces/dynamic/dynamic.dart';
+import 'package:alajal_clock/watch_faces/message_basic/message_basic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    _currentWatchFaceIdx = 6;
+    _currentWatchFaceIdx = 0;
     // DateFormat('EEEE, MMMM dd, yyyy HH:mm').format(DateTime.now());
 
     Timer.periodic(
@@ -112,19 +112,59 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     watchFaces = [
-      Face1(currentDate, _years, _months, _days, _hours, _minutes, _seconds,
+      Basic(currentDate, _years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
-      Face2(_years, _months, _days, _hours, _minutes, _seconds,
+      Analog(_years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
-      Face3(_years, _months, _days, _hours, _minutes, _seconds,
+      MessageBasic(
+          _years,
+          _months,
+          _days,
+          _hours,
+          _minutes,
+          _seconds,
+          onWatchFaceSelected,
+          _isUsedForSelection,
+          '!وقت می گذرد ولی تو را نمی بینیم، بیا',
+          2),
+      MessageBasic(
+          _years,
+          _months,
+          _days,
+          _hours,
+          _minutes,
+          _seconds,
+          onWatchFaceSelected,
+          _isUsedForSelection,
+          'این خانواده منتظر ظهور هست',
+          3),
+      Dynamic(_years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
-      Face4(_years, _months, _days, _hours, _minutes, _seconds,
+      Masked(
+          _years,
+          _months,
+          _days,
+          _hours,
+          _minutes,
+          _seconds,
+          onWatchFaceSelected,
+          _isUsedForSelection,
+          '!وقت می گذرد ولی تو را نمی بینیم، بیا',
+          5),
+      Masked(
+          _years,
+          _months,
+          _days,
+          _hours,
+          _minutes,
+          _seconds,
+          onWatchFaceSelected,
+          _isUsedForSelection,
+          'این خانواده منتظر ظهور هست',
+          6),
+      CircularDate(_years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
-      Face5(_years, _months, _days, _hours, _minutes, _seconds,
-          onWatchFaceSelected, _isUsedForSelection),
-      Face6(_years, _months, _days, _hours, _minutes, _seconds,
-          onWatchFaceSelected, _isUsedForSelection),
-      Face7(_years, _months, _days, _hours, _minutes, _seconds,
+      CircularDateTime(_years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
     ];
 

@@ -1,7 +1,7 @@
-import 'package:alajal_clock/watch_faces/face2/background_specifics.dart';
+import 'package:alajal_clock/watch_faces/dynamic/background_specifics.dart';
 import 'package:flutter/material.dart';
 
-class Face2 extends StatelessWidget {
+class Dynamic extends StatelessWidget {
   late final String years;
   late final String months;
   late final String days;
@@ -12,7 +12,7 @@ class Face2 extends StatelessWidget {
   late final Function onSelectionCb;
   late final bool isUsedForSelection;
 
-  Face2(this.years, this.months, this.days, this.hours, this.minutes,
+  Dynamic(this.years, this.months, this.days, this.hours, this.minutes,
       this.seconds, this.onSelectionCb, this.isUsedForSelection)
       : super();
 
@@ -21,7 +21,7 @@ class Face2 extends StatelessWidget {
     final specifics = getSpecificsByHour();
 
     return GestureDetector(
-      onTap: () => isUsedForSelection ? onSelectionCb(1) : (() => {})(),
+      onTap: () => isUsedForSelection ? onSelectionCb(4) : (() => {})(),
       child: Transform.scale(
           scale: isUsedForSelection ? 0.80 : 1,
           child: Container(
