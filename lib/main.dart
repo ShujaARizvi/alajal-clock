@@ -4,14 +4,15 @@ import 'package:alajal_clock/glance/glance.dart';
 import 'package:alajal_clock/reminder/reminder.dart';
 import 'package:alajal_clock/watch_faces/face4/face4.dart';
 import 'package:alajal_clock/watch_faces/face5.dart';
+import 'package:alajal_clock/watch_faces/face6/face6.dart';
+import 'package:alajal_clock/watch_faces/face7.dart';
 import 'package:vibration/vibration.dart';
 
 import 'package:alajal_clock/watch_faces/face1.dart';
-import 'package:alajal_clock/watch_faces/face2.dart';
+import 'package:alajal_clock/watch_faces/face2/face2.dart';
 import 'package:alajal_clock/watch_faces/face3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -20,6 +21,7 @@ void main() {
 
   WakelockPlus.enable();
 
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
@@ -46,11 +48,11 @@ class MyApp extends StatelessWidget {
         textTheme: ThemeData.light().textTheme.copyWith(
             bodyMedium: const TextStyle(color: Colors.white, fontSize: 22),
             bodyLarge: const TextStyle(
-                color: Colors.white, fontSize: 38, fontWeight: FontWeight.bold),
+                color: Colors.white, fontSize: 68, fontWeight: FontWeight.bold),
             headlineMedium: const TextStyle(
                 color: Colors.white, fontSize: 16, fontFamily: 'Digital7'),
             headlineLarge: const TextStyle(
-                color: Colors.white, fontSize: 88, fontFamily: 'Digital7')),
+                color: Colors.white, fontSize: 102, fontFamily: 'Digital7')),
         // colorScheme: ColorScheme.fromSeed(
         //   seedColor: Colors.deepPurple,
         //   background: Colors.black,
@@ -86,8 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late int _currentWatchFaceIdx;
   late List<Widget> watchFaces;
 
-  late String formattedDate =
-      DateFormat('EEEE, MMMM dd, yyyy HH:mm').format(DateTime.now());
+  DateTime currentDate = DateTime.now();
 
   _MyHomePageState() {
     targetDate = DateTime.utc(941, 6, 7);
@@ -97,43 +98,52 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    _currentWatchFaceIdx = 4;
+    _currentWatchFaceIdx = 6;
+    // DateFormat('EEEE, MMMM dd, yyyy HH:mm').format(DateTime.now());
 
     Timer.periodic(
         const Duration(seconds: 1),
         (timer) => setState(() {
               updateClock();
+              currentDate = DateTime.now();
             }));
   }
 
   @override
   Widget build(BuildContext context) {
     watchFaces = [
-      Face1(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
+      Face1(currentDate, _years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
-      Face2(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
+      Face2(_years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
-      Face3(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
+      Face3(_years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
-      Face4(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
+      Face4(_years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
-      Face5(formattedDate, _years, _months, _days, _hours, _minutes, _seconds,
+      Face5(_years, _months, _days, _hours, _minutes, _seconds,
+          onWatchFaceSelected, _isUsedForSelection),
+      Face6(_years, _months, _days, _hours, _minutes, _seconds,
+          onWatchFaceSelected, _isUsedForSelection),
+      Face7(_years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
     ];
 
-    return WillPopScope(
-        onWillPop: () async => false,
-        child: _isWatchFaceSelectionEnabled
-            ? getHorizontalPageView(formattedDate)
-            : getVerticalPageView(formattedDate));
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: WillPopScope(
+          onWillPop: () async => false,
+          child: _isWatchFaceSelectionEnabled
+              ? getHorizontalPageView()
+              : getVerticalPageView()),
+    );
   }
 
-  getVerticalPageView(String formattedDate) {
+  getVerticalPageView() {
     return PageView(
       scrollDirection: Axis.vertical,
       controller: PageController(initialPage: 1),
       children: [
-        Glance(date: DateTime.now().toUtc()),
+        Glance(date: DateTime.now()),
         GestureDetector(
             onLongPress: () => setState(() {
                   _isWatchFaceSelectionEnabled = true;
@@ -147,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  getHorizontalPageView(String formattedDate) {
+  getHorizontalPageView() {
     return Stack(
       children: [
         PageView.builder(

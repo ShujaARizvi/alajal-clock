@@ -1,5 +1,6 @@
+import 'package:alajal_clock/watch_faces/face4/percent_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:vibration/vibration.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class Face1 extends StatelessWidget {
   late final String years;
@@ -9,12 +10,23 @@ class Face1 extends StatelessWidget {
   late final String minutes;
   late final String seconds;
 
-  late final String formattedDate;
+  late final DateTime currentDate;
 
   late final Function onSelectionCb;
   late final bool isUsedForSelection;
 
-  Face1(this.formattedDate, this.years, this.months, this.days, this.hours,
+  final List<String> dayOfWeek = [
+    '',
+    'MON',
+    'TUE',
+    'WED',
+    'THUR',
+    'FRI',
+    'SAT',
+    'SUN'
+  ];
+
+  Face1(this.currentDate, this.years, this.months, this.days, this.hours,
       this.minutes, this.seconds, this.onSelectionCb, this.isUsedForSelection)
       : super();
 
@@ -30,6 +42,22 @@ class Face1 extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                PercentIndicator(
+                  progress: 100,
+                  total: 100,
+                  fromColor: Colors.green,
+                  toColor: Colors.red,
+                  radius: 20,
+                  lineWidth: 3,
+                  centerWidget: const Icon(
+                    Icons.electric_bolt,
+                    color: Colors.white,
+                  ),
+                  arcType: ArcType.FULL,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,8 +77,17 @@ class Face1 extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  formattedDate,
-                  style: const TextStyle(fontFamily: 'Robotto'),
+                  currentDate.day < 10
+                      ? '0${currentDate.day}'
+                      : '${currentDate.day}',
+                  style: const TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 34),
+                ),
+                Text(
+                  dayOfWeek[currentDate.weekday],
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),
@@ -78,7 +115,9 @@ class Face1 extends StatelessWidget {
               decoration: const BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                      color: Color.fromRGBO(41, 40, 40, 1), width: 1.5),
+                      // color: Color.fromRGBO(41, 40, 40, 1), width: 1.5),
+                      color: Colors.grey,
+                      width: 1.5),
                 ),
               ),
               child:

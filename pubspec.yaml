@@ -40,6 +40,8 @@ dependencies:
   battery: ^2.0.0
   screen_brightness: ^0.2.2+1
   percent_indicator: ^4.0.1
+  analog_clock: ^0.1.0
+  flutter_analog_clock: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +69,10 @@ flutter:
     - assets/images/jamkaran_day.jpeg
     - assets/images/jamkaran_eve.jpeg
     - assets/images/jamkaran_night.jpeg
+    - assets/images/jamkaran_night_cropped.jpeg
+    - assets/images/brown_wooden_floor.jpeg
+    - assets/images/jamkaran_2.jpeg
+    - assets/images/jamkaran_3.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -83,6 +89,18 @@ flutter:
     - family: Digital7
       fonts:
         - asset: assets/fonts/digital-7-mono.ttf
+          weight: 400
+    - family: Delirium
+      fonts:
+        - asset: assets/fonts/Delirium.ttf
+          weight: 400
+    - family: MonumentValley
+      fonts:
+        - asset: assets/fonts/MonumentValley.otf
+          weight: 400
+    - family: Muhaqu
+      fonts:
+        - asset: assets/fonts/Muhaqu.otf
           weight: 400
     - family: FiraCode
       fonts:

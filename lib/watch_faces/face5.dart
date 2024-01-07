@@ -10,13 +10,11 @@ class Face5 extends StatelessWidget {
   late final String minutes;
   late final String seconds;
 
-  late final String formattedDate;
-
   late final Function onSelectionCb;
   late final bool isUsedForSelection;
 
-  Face5(this.formattedDate, this.years, this.months, this.days, this.hours,
-      this.minutes, this.seconds, this.onSelectionCb, this.isUsedForSelection)
+  Face5(this.years, this.months, this.days, this.hours, this.minutes,
+      this.seconds, this.onSelectionCb, this.isUsedForSelection)
       : super();
 
   @override
@@ -190,61 +188,64 @@ class Face5 extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.longestSide / 2,
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      getAvatars(
-                          Colors.red,
-                          'Hours',
-                          const EdgeInsets.only(
-                              left: 6, right: 6, bottom: 12, top: 12)),
-                      Text(
-                        hours,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
+            child: Container(
+              margin: const EdgeInsets.only(top: 10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        getAvatars(
+                            Colors.red,
+                            'Hours',
+                            const EdgeInsets.only(
+                                left: 6, right: 6, bottom: 13, top: 13)),
+                        Text(
+                          hours,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      getAvatars(
-                          Colors.green,
-                          'Minutes',
-                          const EdgeInsets.only(
-                              left: 2, right: 2, bottom: 12, top: 12)),
-                      Text(
-                        minutes,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        getAvatars(
+                            Colors.green,
+                            'Minutes',
+                            const EdgeInsets.only(
+                                left: 2, right: 2, bottom: 13, top: 13)),
+                        Text(
+                          minutes,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      getAvatars(
-                          Colors.purple,
-                          'Seconds',
-                          const EdgeInsets.only(
-                              left: 2, right: 2, bottom: 13, top: 13)),
-                      Text(
-                        seconds,
-                        style: const TextStyle(fontSize: 14),
-                      )
-                    ],
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        getAvatars(
+                            Colors.purple,
+                            'Seconds',
+                            const EdgeInsets.only(
+                                left: 2, right: 2, bottom: 13, top: 13)),
+                        Text(
+                          seconds,
+                          style: const TextStyle(fontSize: 14),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         )

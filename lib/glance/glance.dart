@@ -7,6 +7,7 @@ class Glance extends StatelessWidget {
   final DateTime date;
 
   final List<String> dayOfWeek = [
+    '',
     'Mon',
     'Tue',
     'Wed',
@@ -24,8 +25,8 @@ class Glance extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         Text(
-          '${date.month}/${date.day + 1}',
-          style: Theme.of(context).textTheme.bodyLarge,
+          '${date.month}/${date.day}',
+          style: const TextStyle(fontSize: 38, fontWeight: FontWeight.bold),
         ),
         const SizedBox(
           height: 10,
@@ -35,7 +36,7 @@ class Glance extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         getQuickSettingsGrid(
-            [const BatteryPercentageWidget(), const BrightnessControl()])
+            [const BatteryPercentage(), const BrightnessControl()])
       ]),
     );
   }

@@ -9,13 +9,11 @@ class Face4 extends StatelessWidget {
   late final String minutes;
   late final String seconds;
 
-  late final String formattedDate;
-
   late final Function onSelectionCb;
   late final bool isUsedForSelection;
 
-  Face4(this.formattedDate, this.years, this.months, this.days, this.hours,
-      this.minutes, this.seconds, this.onSelectionCb, this.isUsedForSelection)
+  Face4(this.years, this.months, this.days, this.hours, this.minutes,
+      this.seconds, this.onSelectionCb, this.isUsedForSelection)
       : super();
 
   @override
@@ -35,7 +33,7 @@ class Face4 extends StatelessWidget {
                       total: 2000,
                       fromColor: Colors.red,
                       toColor: Colors.orange,
-                      radius: 200),
+                      radius: 190),
                 ),
                 Center(
                   child: PercentIndicator(
@@ -43,7 +41,7 @@ class Face4 extends StatelessWidget {
                     total: 12,
                     fromColor: Colors.green,
                     toColor: Colors.limeAccent,
-                    radius: 160,
+                    radius: 150,
                   ),
                 ),
                 Center(
@@ -52,7 +50,7 @@ class Face4 extends StatelessWidget {
                     total: 30,
                     fromColor: Colors.purple,
                     toColor: Colors.blue,
-                    radius: 120,
+                    radius: 110,
                   ),
                 ),
                 Center(
@@ -71,7 +69,7 @@ class Face4 extends StatelessWidget {
                                 Colors.red,
                                 'Years',
                                 const EdgeInsets.only(
-                                    left: 7, right: 7, bottom: 18, top: 18)),
+                                    left: 1, right: 1, bottom: 10, top: 10)),
                             Text(years),
                           ],
                         ),
@@ -85,7 +83,7 @@ class Face4 extends StatelessWidget {
                                 Colors.green,
                                 'Months',
                                 const EdgeInsets.only(
-                                    left: 2, right: 2, bottom: 20, top: 20)),
+                                    left: 1, right: 1, bottom: 17, top: 17)),
                             Text(months),
                           ],
                         ),
@@ -99,7 +97,7 @@ class Face4 extends StatelessWidget {
                                 Colors.purple,
                                 'Days',
                                 const EdgeInsets.only(
-                                    left: 12, right: 12, bottom: 20, top: 20)),
+                                    left: 12, right: 12, bottom: 18, top: 18)),
                             Text(days)
                           ],
                         ),
@@ -129,7 +127,7 @@ class Face4 extends StatelessWidget {
         ),
         child: Text(
           value,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ));
   }
 }

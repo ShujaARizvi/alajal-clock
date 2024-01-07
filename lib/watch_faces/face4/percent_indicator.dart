@@ -9,7 +9,9 @@ class PercentIndicator extends StatelessWidget {
   final Color toColor;
   final double radius;
 
-  ArcType? arcType = null;
+  ArcType? arcType;
+  double? lineWidth;
+  Widget? centerWidget;
 
   PercentIndicator(
       {super.key,
@@ -18,18 +20,21 @@ class PercentIndicator extends StatelessWidget {
       required this.fromColor,
       required this.toColor,
       required this.radius,
-      this.arcType});
+      this.arcType,
+      this.lineWidth,
+      this.centerWidget});
 
   @override
   Widget build(BuildContext context) {
     return CircularPercentIndicator(
       radius: radius,
-      lineWidth: 10.0,
+      lineWidth: lineWidth ?? 10.0,
       backgroundColor: Colors.white,
       percent: progress / total,
       circularStrokeCap: CircularStrokeCap.round,
       arcType: arcType,
       linearGradient: LinearGradient(colors: [toColor, fromColor]),
+      center: centerWidget,
     );
   }
 }

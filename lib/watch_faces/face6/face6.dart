@@ -1,6 +1,7 @@
+import 'package:alajal_clock/watch_faces/face6/masked_image.dart';
 import 'package:flutter/material.dart';
 
-class Face3 extends StatelessWidget {
+class Face6 extends StatelessWidget {
   late final String years;
   late final String months;
   late final String days;
@@ -11,26 +12,27 @@ class Face3 extends StatelessWidget {
   late final Function onSelectionCb;
   late final bool isUsedForSelection;
 
-  Face3(this.years, this.months, this.days, this.hours, this.minutes,
+  Face6(this.years, this.months, this.days, this.hours, this.minutes,
       this.seconds, this.onSelectionCb, this.isUsedForSelection)
       : super();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => isUsedForSelection ? onSelectionCb(2) : (() => {})(),
+      onTap: () => isUsedForSelection ? onSelectionCb(5) : (() => {})(),
       child: Transform.scale(
         scale: isUsedForSelection ? 0.8 : 1,
         child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Center(
+          backgroundColor: const Color.fromARGB(255, 231, 229, 229),
+          body: MaskedImage(
+            image: const AssetImage('assets/images/jamkaran_3.jpeg'),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 const Text(
                   '!وقت می گذرد ولی تو را نمی بینیم، بیا',
                   style: TextStyle(
-                      color: Colors.red,
+                      color: Colors.green,
                       fontSize: 32,
                       fontWeight: FontWeight.bold),
                 ),
@@ -41,28 +43,18 @@ class Face3 extends StatelessWidget {
                     getTimePassedWidget(context, 'Years', years, 5),
                     getTimePassedWidget(context, 'Months', months, 5),
                     getTimePassedWidget(context, 'Days', days, 0),
-                    const SizedBox(
-                      width: 25,
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      width: 1.0,
+                      color: Colors.transparent,
                     ),
                     getTimePassedWidget(context, 'Hours', hours, 5),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 14.0),
-                      child: Text(
-                        ':',
-                        style: Theme.of(context).textTheme.headlineLarge,
-                      ),
-                    ),
+                    getCollon(context),
                     getTimePassedWidget(context, 'Minutes', minutes, 5),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 14.0),
-                      child: Text(
-                        ':',
-                        style: Theme.of(context).textTheme.headlineLarge,
-                      ),
-                    ),
+                    getCollon(context),
                     getTimePassedWidget(context, 'Seconds', seconds, 0),
                   ],
-                ),
+                )
               ],
             ),
           ),
@@ -74,30 +66,39 @@ class Face3 extends StatelessWidget {
   getTimePassedWidget(
       BuildContext context, String title, String value, double margin) {
     return Container(
-      margin: EdgeInsets.only(right: margin),
-      constraints: const BoxConstraints(
-        maxHeight: 180.0, // Set the maximum height of the container
-      ),
+      margin: EdgeInsets.only(right: margin, top: 50),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
-              value,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineLarge!
-                  .copyWith(fontSize: 88),
-            ),
+            Text(value,
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge!
+                    .copyWith(fontSize: 176, fontFamily: 'Delirium')),
             Text(
               title,
-              style: const TextStyle(fontSize: 16),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium!
+                  .copyWith(fontSize: 32, fontFamily: 'Delirium'),
             ),
           ],
         ),
       ),
     );
   }
+
+  Padding getCollon(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(bottom: 14.0),
+        child: Text(
+          ':',
+          style: Theme.of(context)
+              .textTheme
+              .headlineLarge!
+              .copyWith(fontSize: 180, fontFamily: 'Delirium'),
+        ),
+      );
 }

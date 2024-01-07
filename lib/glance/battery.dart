@@ -3,15 +3,14 @@ import 'dart:async';
 import 'package:battery/battery.dart';
 import 'package:flutter/material.dart';
 
-class BatteryPercentageWidget extends StatefulWidget {
-  const BatteryPercentageWidget({super.key});
+class BatteryPercentage extends StatefulWidget {
+  const BatteryPercentage({super.key});
 
   @override
-  _BatteryPercentageWidgetState createState() =>
-      _BatteryPercentageWidgetState();
+  _BatteryPercentageState createState() => _BatteryPercentageState();
 }
 
-class _BatteryPercentageWidgetState extends State<BatteryPercentageWidget> {
+class _BatteryPercentageState extends State<BatteryPercentage> {
   final Battery _battery = Battery();
 
   late int batteryLevel;
