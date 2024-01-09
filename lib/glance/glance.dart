@@ -1,4 +1,6 @@
 import 'package:alajal_clock/glance/brightness.dart';
+import 'package:alajal_clock/glance/reminder_picker.dart';
+import 'package:alajal_clock/glance/volume.dart';
 import 'package:flutter/material.dart';
 
 import './battery.dart';
@@ -36,22 +38,37 @@ class Glance extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         getQuickSettingsGrid(
-            [const BatteryPercentage(), const BrightnessControl()])
+          [
+            const BatteryPercentage(),
+            const BrightnessControl(),
+            const ReminderPicker(),
+          ],
+          const VolumeControl(),
+        )
       ]),
     );
   }
 
-  getQuickSettingsGrid(List<Widget> gridItems) {
+  getQuickSettingsGrid(List<Widget> gridItems, Widget lastItem) {
     return SizedBox(
       height: 200,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: gridItems
-            .map((element) => Container(
-                  margin: const EdgeInsets.all(10),
-                  child: element,
-                ))
-            .toList(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: gridItems
+                .map((element) => Container(
+                      margin: const EdgeInsets.all(10),
+                      child: element,
+                    ))
+                .toList(),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [lastItem],
+          )
+        ],
       ),
     );
   }

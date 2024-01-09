@@ -64,9 +64,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
   final String title;
+
+  const MyHomePage({super.key, required this.title});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -75,7 +75,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late DateTime targetDate;
 
-  late String _years;
+  late String _years = '';
   late String _months;
   late String _days;
 
@@ -86,7 +86,10 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isWatchFaceSelectionEnabled = false;
   bool _isUsedForSelection = false;
   late int _currentWatchFaceIdx;
+  late int _currentVerticalPage;
   late List<Widget> watchFaces;
+
+  static const _volumeBtnChannel = MethodChannel("mychannel");
 
   DateTime currentDate = DateTime.now();
 
@@ -98,7 +101,20 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
+    _volumeBtnChannel.setMethodCallHandler((call) {
+      if (call.method == "volumeBtnPressed") {
+        if (call.arguments == "volume_down") {
+          changeWatchFaceDown();
+        } else if (call.arguments == "volume_up") {
+          changeWatchFaceUp();
+        }
+      }
+
+      return Future.value(null);
+    });
+
     _currentWatchFaceIdx = 0;
+    _currentVerticalPage = 1;
     // DateFormat('EEEE, MMMM dd, yyyy HH:mm').format(DateTime.now());
 
     Timer.periodic(
@@ -107,6 +123,28 @@ class _MyHomePageState extends State<MyHomePage> {
               updateClock();
               currentDate = DateTime.now();
             }));
+  }
+
+  changeWatchFaceDown() {
+    setState(() {
+      _currentWatchFaceIdx -= 1;
+      if (_currentWatchFaceIdx < 0) {
+        _currentWatchFaceIdx = watchFaces.length - 1;
+      }
+    });
+  }
+
+  changeWatchFaceUp() {
+    setState(() {
+      _currentWatchFaceIdx = (_currentWatchFaceIdx + 1) % watchFaces.length;
+    });
+  }
+
+  jumpToHome() {
+    print('home pressed');
+    setState(() {
+      _currentVerticalPage = 1;
+    });
   }
 
   @override
@@ -136,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
           _seconds,
           onWatchFaceSelected,
           _isUsedForSelection,
-          'این خانواده منتظر ظهور هست',
+          '!این خانواده منتظر ظهور هست',
           3),
       Dynamic(_years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
@@ -160,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
           _seconds,
           onWatchFaceSelected,
           _isUsedForSelection,
-          'این خانواده منتظر ظهور هست',
+          '!این خانواده منتظر ظهور هست',
           6),
       CircularDate(_years, _months, _days, _hours, _minutes, _seconds,
           onWatchFaceSelected, _isUsedForSelection),
@@ -169,6 +207,8 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
 
     return Scaffold(
+      drawerEdgeDragWidth: 0.0,
+      drawerEnableOpenDragGesture: false,
       backgroundColor: Colors.transparent,
       body: WillPopScope(
           onWillPop: () async => false,
@@ -181,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> {
   getVerticalPageView() {
     return PageView(
       scrollDirection: Axis.vertical,
-      controller: PageController(initialPage: 1),
+      controller: PageController(initialPage: _currentVerticalPage),
       children: [
         Glance(date: DateTime.now()),
         GestureDetector(

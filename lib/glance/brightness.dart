@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:screen_brightness/screen_brightness.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BrightnessControl extends StatefulWidget {
   const BrightnessControl({super.key});
@@ -13,6 +14,13 @@ class _BrightnessControlState extends State<BrightnessControl> {
   int currentBrightnessLevelIdx = 0;
 
   @override
+  void initState() {
+    loadBrightessLevelIdx();
+    setBrightness();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -21,11 +29,26 @@ class _BrightnessControlState extends State<BrightnessControl> {
               (currentBrightnessLevelIdx + 1) % brightnessLevels.length;
         });
         setBrightness();
+        setBrightessLevelIdxInPrefs(currentBrightnessLevelIdx);
       },
-      child: Icon(
-        getIconByBrightnessLevel(),
-        color: Colors.white,
-        size: 54.0,
+      child: Stack(
+        children: [
+          Icon(
+            getIconByBrightnessLevel(),
+            color: Colors.white,
+            size: 54.0,
+          ),
+          Container(
+            transform: Matrix4.translationValues(0.0, 55.0, 0.0),
+            child: const Text(
+              'Brightness',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -84,5 +107,18 @@ class _BrightnessControlState extends State<BrightnessControl> {
     }
 
     return brightness;
+  }
+
+  Future<void> loadBrightessLevelIdx() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      currentBrightnessLevelIdx = prefs.getInt('brightness_level_idx') ?? 0;
+      setBrightness();
+    });
+  }
+
+  Future<void> setBrightessLevelIdxInPrefs(int brightnessLevelIdx) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('brightness_level_idx', brightnessLevelIdx);
   }
 }

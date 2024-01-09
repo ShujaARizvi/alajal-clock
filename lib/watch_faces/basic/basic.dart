@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:alajal_clock/watch_faces/circular_date/percent_indicator.dart';
+import 'package:battery/battery.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-class Basic extends StatelessWidget {
+class Basic extends StatefulWidget {
   late final String years;
   late final String months;
   late final String days;
@@ -15,6 +18,21 @@ class Basic extends StatelessWidget {
   late final Function onSelectionCb;
   late final bool isUsedForSelection;
 
+  Basic(this.currentDate, this.years, this.months, this.days, this.hours,
+      this.minutes, this.seconds, this.onSelectionCb, this.isUsedForSelection)
+      : super();
+
+  @override
+  State<Basic> createState() => _BasicState();
+}
+
+class _BasicState extends State<Basic> {
+  final Battery _battery = Battery();
+
+  late int batteryLevel;
+
+  late Timer batteryPollingTimer;
+
   final List<String> dayOfWeek = [
     '',
     'MON',
@@ -26,16 +44,34 @@ class Basic extends StatelessWidget {
     'SUN'
   ];
 
-  Basic(this.currentDate, this.years, this.months, this.days, this.hours,
-      this.minutes, this.seconds, this.onSelectionCb, this.isUsedForSelection)
-      : super();
+  @override
+  void initState() {
+    super.initState();
+
+    batteryLevel = 100;
+
+    batteryPollingTimer = Timer.periodic(
+        const Duration(seconds: 1),
+        (timer) => _battery.batteryLevel.then((value) {
+              setState(() {
+                batteryLevel = value;
+              });
+            }));
+  }
+
+  @override
+  void dispose() {
+    batteryPollingTimer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => isUsedForSelection ? onSelectionCb(0) : (() => {})(),
+      onTap: () =>
+          widget.isUsedForSelection ? widget.onSelectionCb(0) : (() => {})(),
       child: Transform.scale(
-        scale: isUsedForSelection ? 0.8 : 1,
+        scale: widget.isUsedForSelection ? 0.8 : 1,
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
@@ -43,7 +79,7 @@ class Basic extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 PercentIndicator(
-                  progress: 100,
+                  progress: batteryLevel,
                   total: 100,
                   fromColor: Colors.green,
                   toColor: Colors.red,
@@ -62,31 +98,31 @@ class Basic extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    getTimePassedWidget(context, 'Years', years, 5),
-                    getTimePassedWidget(context, 'Months', months, 5),
-                    getTimePassedWidget(context, 'Days', days, 0),
+                    getTimePassedWidget(context, 'Years', widget.years, 5),
+                    getTimePassedWidget(context, 'Months', widget.months, 5),
+                    getTimePassedWidget(context, 'Days', widget.days, 0),
                     Container(
                       margin: const EdgeInsets.all(10),
                       height: 180.0,
                       width: 1.0,
                       color: Colors.white,
                     ),
-                    getTimePassedWidget(context, 'Hours', hours, 5),
-                    getTimePassedWidget(context, 'Minutes', minutes, 5),
-                    getTimePassedWidget(context, 'Seconds', seconds, 0),
+                    getTimePassedWidget(context, 'Hours', widget.hours, 5),
+                    getTimePassedWidget(context, 'Minutes', widget.minutes, 5),
+                    getTimePassedWidget(context, 'Seconds', widget.seconds, 0),
                   ],
                 ),
                 Text(
-                  currentDate.day < 10
-                      ? '0${currentDate.day}'
-                      : '${currentDate.day}',
+                  widget.currentDate.day < 10
+                      ? '0${widget.currentDate.day}'
+                      : '${widget.currentDate.day}',
                   style: const TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
                       fontSize: 34),
                 ),
                 Text(
-                  dayOfWeek[currentDate.weekday],
+                  dayOfWeek[widget.currentDate.weekday],
                   style: const TextStyle(color: Colors.grey),
                 ),
               ],

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:battery/battery.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BatteryPercentage extends StatefulWidget {
   const BatteryPercentage({super.key});
@@ -12,16 +13,15 @@ class BatteryPercentage extends StatefulWidget {
 
 class _BatteryPercentageState extends State<BatteryPercentage> {
   final Battery _battery = Battery();
+  late Timer batteryPollingTimer;
 
-  late int batteryLevel;
+  int batteryLevel = 100;
 
   @override
   void initState() {
     super.initState();
 
-    batteryLevel = 100;
-
-    Timer.periodic(
+    batteryPollingTimer = Timer.periodic(
         const Duration(seconds: 1),
         (timer) => _battery.batteryLevel.then((value) {
               setState(() {
@@ -31,16 +31,27 @@ class _BatteryPercentageState extends State<BatteryPercentage> {
   }
 
   @override
+  void dispose() {
+    batteryPollingTimer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
+    return Stack(
       children: [
         Icon(
           getBatteryLevelIcon(batteryLevel),
           color: Colors.white,
           size: 54.0,
         ),
-        Text(
-          '$batteryLevel%',
+        Container(
+          transform: Matrix4.translationValues(14.0, 55.0, 0.0),
+          child: Text(
+            '$batteryLevel%',
+            style: const TextStyle(
+                fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
         ),
       ],
     );
